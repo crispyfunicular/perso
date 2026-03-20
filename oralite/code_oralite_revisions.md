@@ -1,5 +1,5 @@
 # Révisions code synthèse de la parole
-## PSOLA
+## A
 1. Charger la bibliothèque principale (`parselmouth`) --> *boîte à outils*
 2. Créer un raccourci vers `call` (fonction du sous-module `praat`) --> il suffira ensuite de taper `all` --> *tournevis*
 
@@ -19,6 +19,8 @@ Création d'un objet `sound` contenant les données acoustiques du fichier audio
 ```python
 sound = parselmouth.Sound("resultat_synthese.wav")
 ```
+
+### Modification de la hauteur (pitch)
 Commande **manipulation** : transforme le son brut en objet manipulable --> obligatoire
 - `0.01` : le fichier est découpé et analysé toutes les 10 ms.
 - `75` / `600` (Hz) : limites de la fréquence fondamentale (F0)  
@@ -30,24 +32,91 @@ manipulation = call(sound, "To Manipulation", 0.01, 75, 600)
 
 `pitch_tier` : couche de données qui contient la mélodie de la voix (correspond à la F0) --> courbe de mélodie  
 Liste de coordonnées mathématiques avec deux valeurs : le temps (en secondes) et la fréquence (en hertz). Ex : à 0.1 seconde on est à 120 Hz, à 0.2 seconde on est à 125 Hz, etc.
-- `1.2` : modification mathématique des valeurs de la courbe de mélodie --> multiplication des fréquences de la voix par 1,2 (= augmentation de 20%). --> La voix paraîtra plus aiguë.
+
+```python
+pitch_tier = call(manipulation, "Extract pitch tier")
+```
+
+`1.2` : modification mathématique des valeurs de la courbe de mélodie --> multiplication des fréquences de la voix par 1,2 (= augmentation de 20%). --> La voix paraîtra plus aiguë.
 
 ```python
 call(pitch_tier, "Multiply frequencies", sound.xmin, sound.xmax, 1.2)
 ```
 
-Remplace le pitch original (`manipulation`) par le nouveau pitch (`pitch_tier`) qu'on vient de rendre plus aigu
+**Replace**  : Remplace le pitch original (`manipulation`) par le nouveau pitch (`pitch_tier`) qu'on vient de rendre plus aigu --> "Replace **pitch** tier"
+La variable `manipulation` garde le même nom, mais son contenu a été mis à jour avec les modifications.
 
 ```python
 call([manipulation, pitch_tier], "Replace pitch tier")
 ```
 
+Génération d'un nouveau fichier à partir de manipulation
+`overlap-add` : l'algorithme PSOLA découpe la voix en toutes petites ondes, les écarte ou les rapproche selon les modifications, puis les superpose en douceur (overlap) et les additionne (add) pour que le résultat soit fluide, sans aucun "clic" désagréable.
+
+```python
+resynth = call(manipulation, "Get resynthesis (overlap-add)")
+```
+***
+***
+
+Au lieu d'extraire la mélodie, on extrait la grille du temps (le calque de durée ou "duration tier"). Par défaut, ce calque est une ligne droite horizontale à 1 (vitesse normale, 100% de la durée d'origine)
+
+```python
+duration_tier = call(manipulation, "Extract duration tier")
+```
+
+### Modification de la vitesse
+Modification de la vitesse à un instant précis
+- `0.5` (le moment) : on cible la seconde 0,5 du fichier audio.
+- `1.5` (l'action) : le multiplicateur de durée. "À ce moment précis, étire le son pour qu'il dure 1,5 fois plus longtemps".
+- --> Le résultat : L'audio va ralentir ponctuellement autour de la demi-seconde.
+
+```python
+call(duration_tier, "Add point", 0.5, 1.5)
+```
+
+**Replace**  
+```python
+call([manipulation, duration_tier], "Replace duration tier")
+```
+
+- `t0` : temps de début
+- `t1` : temps de fin
+- `t1-t0` : durée totale du fichier en secondes  
+--> Permettra de travailler non pas en secondes mais en pourcentages de la durée --> le code fonctionnera quelle que soit la durée de l'audio.
+
+```python
+t0 = sound.xmin
+t1 = sound.xmax
+dur = t1 - t0
+```
+
+`t0 + 0.40 * dur` : On se place à 40% de la durée et on force la voix à être à 140 Hz
+```python
+call(pitch_tier, "Add point", t0 + 0.40 * dur, 140)
+```
+
+`t0 + 0.95 * dur, 95` :  juste avant la fin, la voix chute dans les graves --> La phrase est terminée
+```python
+call(pitch_tier, "Add point", t0 + 0.95 * dur, 95)
+```
+
+**Replace**
+```python
+call([manipulation, pitch_tier], "Replace pitch tier")
+```
+
+**Génération**
+```python
+resynth = call(manipulation, "Get resynthesis (overlap-add)")
+```
+
+**Sauvegarde sur l'ordinateur**
 ```python
 resynth.save("toto.wav","WAV")
 ```
 
-
-## matplotlib
+## B
 ### Chargement des données
 Charger un fichier audio avec sa transcription temporelle
 Objets Parselmouth :  
@@ -114,7 +183,7 @@ for i in range(len(chaine_sampa) - 1):
     diphone = chaine_sampa[i:i+2]
 ```
 
-#### Modification prosodique (PSOLA)
+### Modification prosodique (PSOLA)
 #### Modification de la hauteur (pitch)
 - Extraction de la courbe mélodique de la synthèse et multiplication des fréquences par 1.2 --> voix plus aiguë
 ```python
