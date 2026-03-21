@@ -1,5 +1,5 @@
 # Vocodeur
-
+L'oreille humaine ne perçoit pas le volume de manière linéaire, mais de manière logarithmique : elle est plus sensible aux variations dans les sons faibles que dans les sons forts --> Convertir l'amplitude mathématique en décibels (dB) permet d'avoir une image qui correspond à la façon dont l'oreille humaine entend les sons.
 ## Librairie Librosa
 `sr=None` : on force Librosa à conserver la fréquence d'origine, sans rééchantillonnage (pour pouvoir analyser les hautes fréquences pour /s/ et /f/)
 ```python
@@ -19,8 +19,8 @@ freqs = np.fft.fftfreq(len(signal), 1/sr)
 plt.plot(freqs, np.abs(fft))
 ```
 ## Spectrogramme
-- `librosa.stft()` : Au lieu de faire une FFT sur tout le fichier d'un coup, l'algorithme découpe l'audio en toutes petites "fenêtres" (par exemple de 20 millisecondes) qui se chevauchent et fait une FFT sur chacune d'entre elles. --> **trame** = photo instantanée du conduit vocal
-- `.amplitude_to_db()` : L'oreille humaine ne perçoit pas le volume de manière linéaire, mais de manière logarithmique --> Convertir l'amplitude mathématique en décibels (dB) permet d'avoir une image qui correspond à ce que l'on entend vraiment.
+- `librosa.stft()` : Short-Term Fourier Transform : au lieu de faire une FFT sur tout le fichier d'un coup, l'algorithme découpe l'audio en toutes petites "fenêtres" (par exemple de 20 millisecondes) qui se chevauchent et fait une FFT sur chacune d'entre elles. --> **trame** = photo instantanée du conduit vocal
+- `.amplitude_to_db()` : conversion en décibels
 ```python
 S = librosa.stft(signal)
 S_db = librosa.amplitude_to_db(np.abs(S), ref=np.max)
@@ -28,14 +28,14 @@ librosa.display.specshow(S_db, sr=sr, x_axis='time', y_axis='hz')
 ```
 
 ## PAS
-- Intervalle de temps qui sépare le début d'une trame de la suivante.
+- Intervalle de temps qui sépare le début d'une trame de la suivante = durée d'une trame.
 - Par défaut, le vocodeur WORLD utilise un PAS de 5 ms (0.005 s). Cela signifie qu'il calcule une nouvelle valeur de pitch (`f0`), d'enveloppe (`sp`) et de souffle (`ap`) exactement toutes les 5 millisecondes. --> L'ordinateur fait son calcul, avance de 5 ms sur le fichier audio, et refait un calcul.
 - Le PAS permet de passer du temps réel (secondes) au temps informatique (trames) --> Un phonème de 80 ms occupera 16 trames.
 - => Le *taux d'échantillonnage* crée les milliards de petits points du fichier audio (non modifiable a posteriori) et le *PAS* est la vitesse à laquelle l'algorithme avance au milieu de ces points pour prendre ses photos (modifiable a posteriori).
 
 ## Enveloppe spectrale
 ### Trame (frame) et fenêtre de Hamming
-- On isole une fraction de seconde pendant laquelle on considère que la bouche est figée (une voyelle)
+- On isole une trame (fraction de seconde) pendant laquelle on considère que le conduit vocal est figé / stationnaire (une voyelle) = hypothèse de stationnarité
 - 12048-10000 = 2048 = 2^11 : L'algorithme de la FFT travaille de manière optimale sur les puissances de 2.
 - `np.hamming` : création d'une courbe mathématique en forme de cloche
 - `frame * window` : multiplication de la trame par la cloche --> adoucit les extrémités --> évite les sauts et les "clics" abrupts aux extrémités
@@ -46,7 +46,7 @@ frame = frame * window
 ```
 - `plt.plot(x, y)` : trace une courbe avec x en abscisses et y en ordonnées
 - `20*np.log10(np.abs(fft_frame))` : conversion en décibels
-- `np.log10()` : écrase les valeurs pour reproduire la façon dont l'oreille humaine entend les sons (elle est plus sensible aux variations dans les sons faibles que dans les sons forts).
+- `np.log10()` : écrase les valeurs pour reproduire la façon dont l'oreille humaine entend les sons
 ```python
 plt.plot(freqs, 20*np.log10(np.abs(fft_frame)))
 ```
@@ -58,7 +58,7 @@ plt.show()
 
 ### Filtre gaussien
 `gaussian_filter1d` 
-Pour trouver la forme de la bouche, on ne veut pas voir chaque petite harmonique, on veut voir la forme globale (les formants). --> il faut lisser les harmoniques pour voir les formants --> moyenne glissante des petits pics --> Les dents de scie sont lissées pour ne laisser apparaître qu'une courbe globale et continue = enveloppe spectrale (= empreinte de la bouche et de la langue)
+Pour trouver la forme de la bouche, on ne veut pas voir chaque petite harmonique, on veut voir la forme globale (les formants). --> **il faut lisser les harmoniques pour voir les formants** --> Les dents de scie sont lissées pour ne laisser apparaître qu'une courbe globale et continue = enveloppe spectrale (= empreinte de la bouche et de la langue)
 ```python
 from scipy.ndimage import gaussian_filter1d
 envelope = gaussian_filter1d(np.abs(fft_frame), sigma=10)
@@ -79,7 +79,7 @@ f0 = pw.stonemask(signal, _f0, t, sr)
 ```
 
 ### Extraction du filtre (`sp`)
-L'enveloppe spectrale EST la représentation mathématique visuelle du filtre.
+L'enveloppe spectrale est la représentation mathématique visuelle du **filtre**.
 ```python
 sp = pw.cheaptrick(signal, f0, t, sr)
 ```
@@ -119,7 +119,7 @@ ap_total = np.concatenate([ap[fd_ss:ff_ss],ap[fd_aa:ff_aa]])
   - enveloppe spectrale moyenne (`sp`)
   - apériodicité moyenne (`ap`)
   - pitch moyen (`f0`)
-  - durée moyenne (`duree`) : la durée n'est pas enregistrée en secondes mais en nombre de trames.
+  - durée moyenne (`duree`) : enregistrée non pas en secondes mais en nombre de trames.
 ```python
 phonemes_corpus = {
     'aa', 'ai', 'an', 'au', 'bb', 'ch', 'dd', 'ei', 'eu', 'ff', 'gg', 'ii',
@@ -138,7 +138,7 @@ for phoneme in phonemes_corpus:
     }
 ```
 
-- Pour dire "soleil" (["ss", "oo", "ll", "ei", "jj"]), la fonction cherche dans le dictionnaire la "moyenne" de chaque phonème. Comme la recette ne dure qu'une seule trame (5 millisecondes), le code la multiplie/répète (extend([...]*n)) pour atteindre la durée moyenne normale de ce phonème.
+- Pour dire "soleil" (["ss", "oo", "ll", "ei", "jj"]), la fonction cherche dans le dictionnaire la "moyenne" de chaque phonème. Comme la recette ne dure qu'une seule trame (5 ms), le code la multiplie/répète (`extend([...]*n)`) pour atteindre la durée moyenne normale de ce phonème.
 - `n` = nombre de trames nécessaires pour le phonème dure le bon temps. Recalculé pour chaque phonème (plus court pour les occlusives et plus long pour les fricatives et les voyelles)
 - `n = max(1,int(dico[phoneme]["duree"]))` : chaque phonème demandé durera au moins 1 trame (5 ms)
 - si `n` = 16, la ligne `f0_total.extend([dico[phoneme]["f0"]]*n)` crée une liste de 16 fois la valeur 150 (`.extend()`) puis l'ajoute à la liste finale --> La voix est figée pendant toute la durée du phonème --> effet robot
