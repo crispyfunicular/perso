@@ -2,7 +2,35 @@
 
 Ce document synthétise les commandes et concepts SQL abordés dans le cours.
 
-## Structure globale d'une requête
+## Création de tables (DDL)
+
+* `CREATE TABLE` : Permet de créer la structure d'une table[184].
+* **Types de données** : `INT` pour les entiers, `VARCHAR()` pour les chaînes de caractères variables, `CHAR()`.
+* **Contraintes** : `PRIMARY KEY` pour la clé primaire, `AUTO INCREMENT` pour l'incrémentation automatique.
+
+```sql
+CREATE TABLE IF NOT EXISTS employes (
+    mut_nom TEXT PRIMARY KEY,
+    num INTEGER,
+    fonction TEXT,
+    n_sup INTEGER,
+    embauche DATE,
+    salaire INTEGER,
+    comm INTEGER,
+    n_dept INTEGER
+);
+
+INSERT INTO emp (mut_nom, num, fonction, n_sup, embauche, salaire, comm, n_dept)
+VALUES
+    ('martin', 16712, 'directeur', 257187, '23/05/1990', 40000, 4000, 30),
+    ('dupont', 17574, 'administratif', 16712, '03/05/1995', 9000, 500, 30),
+    ('lambert', 25012, 'administratif', 27047, '14/04/1991', 12000, 150, 20),
+    ('dupond', 26691, 'commercial', 27047, '04/04/1990', 25000, 2500, 20)
+    ;
+```
+
+
+## Requête `SELECT`
 L'ordre SQL `SELECT` est composé de 6 clauses, dont 4 sont optionnelles. 
 
 | Clause | Rôle et description |
@@ -15,6 +43,19 @@ L'ordre SQL `SELECT` est composé de 6 clauses, dont 4 sont optionnelles.
 | **ORDER BY** | Tri des données du résultat. |
 
 
+```sql
+SELECT nom, salaire, commission
+FROM employes
+WHERE comm < salaire
+
+WHERE salaire BETWEEN 9000 AND 15000
+
+WHERE n_dept = 30 AND salaire > 25000
+
+WHERE commission IS NULL
+;
+```
+
 ## Fonctions d'agrégation
 Ces fonctions s'utilisent pour effectuer des calculs sur un ensemble de données regroupées :
 
@@ -24,6 +65,13 @@ Ces fonctions s'utilisent pour effectuer des calculs sur un ensemble de données
 * **`COUNT(nom_attribut)`** : compte le **nombre d'occurrences** de l'attribut.
 * **`AVG(nom_attribut)`** : calcule la **moyenne** des valeurs des attributs.
 
+```sql
+SELECT nom_gestionnaire, AVG(solde) AS solde_moyen
+FROM comptes
+GROUP BY nom_gestionnaire
+HAVING AVG(solde) > 300
+;
+```
 
 ## Opérateurs
 Les opérateurs permettent de comparer une valeur à un ensemble de valeurs ou d'effectuer des calculs :
@@ -33,9 +81,9 @@ Les opérateurs permettent de comparer une valeur à un ensemble de valeurs ou d
 * **`ALL`** : la comparaison est vraie si elle est vraie pour tous les éléments de l'ensemble.
 * **Opérateurs arithmétiques** : `+`, `-`, `*`, `/`.
 
-
-## Création de tables (DDL)
-
-* **`CREATE TABLE`** : Permet de créer la structure d'une table[184].
-* **Types de données** : **`INT`** pour les entiers, **`VARCHAR()`** pour les chaînes de caractères variables [186], **`CHAR()`**.
-* **Contraintes** : **`PRIMARY KEY`** pour la clé primaire, **`AUTO INCREMENT`** pour l'incrémentation automatique.
+```sql
+SELECT nom, salaire, commission
+FROM employes
+WHERE function IN ('commercial', 'directeur')
+;
+```
