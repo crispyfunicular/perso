@@ -87,3 +87,41 @@ FROM employes
 WHERE function IN ('commercial', 'directeur')
 ;
 ```
+
+## Jointures
+
+Les jointures permettent d'interroger simultanément plusieurs tables liées entre elles par des attributs communs (généralement une clé primaire et une clé étrangère).
+
+### Syntaxe explicite (`INNER JOIN`)
+- `INNER JOIN` : assembler deux tables
+- `ON` : spécifier la condition de jointure (l'égalité entre les champs correspondants).
+
+```sql
+-- Exemple : Liste des noms de clients avec leur adresse et leur numéro de compte
+SELECT Titulaires.nom_client, Titulaires.numero_compte, Clients.adresse_client
+FROM Titulaires 
+INNER JOIN Clients ON Titulaires.nom_client = Clients.nom_client;
+```
+
+### Syntaxe implicite (`WHERE`)
+- `FROM` : indiquer toutes les tables séparées par des virgules
+- `WHERE` : définir la condition d'égalité
+
+```sql
+SELECT nom, adresse_client
+FROM Clients, Titulaires
+WHERE Clients.nom = Titulaires.nom;
+```
+
+### Jointures multiples
+Il est possible de croiser les données de plus de deux tables en enchaînant simplement les `INNER JOIN`.
+
+```sql
+-- Exemple entre 3 tables : Titulaires, Comptes et Clients
+SELECT Titulaires.nom_client, Titulaires.numero_compte, Comptes.solde, Comptes.nom_gestionnaire, Comptes.nom_agence, Clients.adresse_client
+FROM Titulaires 
+INNER JOIN Comptes ON Titulaires.numero_compte = Comptes.numero_compte
+INNER JOIN Clients ON Titulaires.nom_client = Clients.nom_client;
+```
+
+**Note :** Si un attribut porte le même nom dans plusieurs des tables interrogées (comme `nom_client` ou `numero_compte`), il faut obligatoirement préciser de quelle table il provient en le préfixant (`Table.attribut`, par exemple `Titulaires.nom_client`), tant dans le `SELECT` que dans le `ON` ou `WHERE`, afin d'éviter toute ambiguïté.
