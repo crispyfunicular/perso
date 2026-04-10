@@ -1,4 +1,4 @@
-"""
+/*
 Une maîtresse de maison veut construire une base de données sur les personnes
 qu’elle invite et les plats qu’elle leur sert. Elle identifie pour cela les trois relations
 suivantes :
@@ -17,7 +17,7 @@ PERSONNE et INVITÉ ont le même domaine de valeurs.
 ⇒ Les plats qui ont été servis à « Mr Machin ».
 ⇒ Les personnes invitées qui ont été servies par leurs plats préférés.
 ⇒ Les personnes qui n’ont jamais été invitées.
-"""
+*/
 
 CREATE TABLE IF NOT EXISTS repas (
     invite TEXT PRIMARY KEY,
@@ -62,3 +62,9 @@ FROM repas
 INNER JOIN preference ON repas.invite = preference.personne
 INNER JOIN menu ON repas.date_repas = menu.date_menu
 WHERE menu.plat = preference.plat;
+
+-- Les personnes qui n’ont jamais été invitées
+SELECT personne
+FROM preference
+LEFT JOIN repas ON preference.personne = repas.invite
+WHERE repas.invite IS NULL;

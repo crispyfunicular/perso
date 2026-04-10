@@ -4,7 +4,7 @@ Ce document synthétise les commandes et concepts SQL abordés dans le cours.
 
 ## Création de tables (DDL)
 
-* `CREATE TABLE` : Permet de créer la structure d'une table[184].
+* `CREATE TABLE` : Permet de créer la structure d'une table.
 * **Types de données** : `INT` pour les entiers, `VARCHAR()` pour les chaînes de caractères variables, `CHAR()`.
 * **Contraintes** : `PRIMARY KEY` pour la clé primaire, `AUTO INCREMENT` pour l'incrémentation automatique.
 
