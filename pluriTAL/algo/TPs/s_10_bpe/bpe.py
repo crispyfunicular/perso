@@ -57,7 +57,7 @@ CORPUS = {
 #   { tuple_de_symboles : fréquence }
 
 
-def preprocess(corpus: dict) -> dict:
+def preprocess(corpus):
     """
     Transforme un dictionnaire {mot: fréquence} en vocabulaire segmenté.
 
@@ -70,15 +70,7 @@ def preprocess(corpus: dict) -> dict:
     # cas simple : un mot d'un seul caractère → ('x', '</w>')
     # cas complexe : itérer sur les caractères du mot et ajouter '</w>' à la fin
 
-    vocab = {}
-
-    for mot, nb in corpus.items():
-        mot_liste = list(mot)
-        mot_liste.append("</w>")
-        vocab[tuple(mot_liste)] = nb
-    
-    return vocab
-    
+    NotImplemented
 
 
 # Test 1.1
@@ -94,7 +86,7 @@ print()
 
 # -----------------------------------------------------------------------------
 
-def get_pair_counts(vocab: dict) -> dict:
+def get_pair_counts(vocab):
     """
     Compte la fréquence de chaque paire de symboles adjacents dans le vocab.
     La fréquence d'une paire est pondérée par la fréquence du mot qui la contient.
@@ -114,14 +106,7 @@ def get_pair_counts(vocab: dict) -> dict:
     # astuce : pour chaque mot, parcourir les paires (symboles[i], symboles[i+1])
     #                et sommer leurs contributions pondérées par la fréquence du mot
 
-    counts = {}
-    for mot, nb in vocab.items():
-        for i in range(len(mot)-1):
-            paire = (mot[i], mot[i+1])
-            if not paire in counts:
-                counts[paire] = 0
-            counts[paire] += nb
-    return counts
+    NotImplemented
 
 
 # Test 1.2
@@ -149,7 +134,7 @@ print()
 #   après  : {('r','ai','l','</w>'): 3}
 
 
-def merge_vocab(pair: tuple, vocab: dict) -> dict:
+def merge_vocab(pair, vocab):
     """
     Applique une fusion à tout le vocabulaire segmenté.
 
@@ -176,24 +161,6 @@ def merge_vocab(pair: tuple, vocab: dict) -> dict:
     left, right = pair # Les deux symboles qu'on aimerait fusionner dans notre vocabulaire
     merged = left + right # Le nouveau symbole à introduire au vocabulaire
 
-    for v_tuple, nb in vocab.items():
-        vocab_list = []
-        i = 0
-        while i < len(v_tuple):
-            if i == len(v_tuple) - 1:
-                vocab_list.append(v_tuple[i])
-                break
-            if v_tuple[i] == left and v_tuple[i+1] == right:
-                vocab_list.append(left + right)
-                i += 1
-            else:
-                vocab_list.append(v_tuple[i])
-            i += 1
-    
-        vocab_tuple = tuple(vocab_list)
-        new_vocab[vocab_tuple] = nb
-
-    return new_vocab
 
 # Test 2.1
 print("=" * 60)
@@ -209,7 +176,7 @@ print()
 
 # -----------------------------------------------------------------------------
 
-def train_bpe(corpus: dict, n_merges: int):
+def train_bpe(corpus, n_merges):
     """
     Entraîne BPE sur le corpus pendant n_merges étapes.
 
@@ -231,15 +198,7 @@ def train_bpe(corpus: dict, n_merges: int):
                d. Mettre à jour le vocabulaire avec merge_vocab
         3. Retourner vocab et merge_rules
     """
-
-    vocab = preprocess(corpus)
-    merge_rules = []
-
-    for _ in range(n_merges):
-        paires = get_pair_counts(vocab)
-        merge_rules.append(max(merge_vocab(paires, vocab)))
-
-    return vocab
+    NotImplemented
 
 
 # Test 2.2
