@@ -1,6 +1,6 @@
-# Révisions commandes SQL
+# Révisions commissionandes SQL
 
-Ce document synthétise les commandes et concepts SQL abordés dans le cours.
+Ce document synthétise les commissionandes et concepts SQL abordés dans le cours.
 
 ## Création de tables (DDL)
 
@@ -9,54 +9,78 @@ Ce document synthétise les commandes et concepts SQL abordés dans le cours.
 * **Contraintes** : `PRIMARY KEY` pour la clé primaire, `AUTO INCREMENT` pour l'incrémentation automatique.
 
 ```sql
-CREATE TABLE IF NOT EXISTS employes (
-    mut_nom TEXT PRIMARY KEY,
+CREATE TABLE IF NOT EXISTS Employes (
+    id INTEGER NOT NULL PRIMARY KEY, -- Auto-incrémentation
+    nom TEXT,
     num INTEGER,
     fonction TEXT,
     n_sup INTEGER,
     embauche DATE,
     salaire INTEGER,
-    comm INTEGER,
+    commission INTEGER,
     n_dept INTEGER
 );
 
-INSERT INTO emp (mut_nom, num, fonction, n_sup, embauche, salaire, comm, n_dept)
+INSERT INTO Employes (nom, num, fonction, n_sup, embauche, salaire, commission, n_dept)
 VALUES
-    ('martin', 16712, 'directeur', 257187, '23/05/1990', 40000, 4000, 30),
-    ('dupont', 17574, 'administratif', 16712, '03/05/1995', 9000, 500, 30),
-    ('lambert', 25012, 'administratif', 27047, '14/04/1991', 12000, 150, 20),
-    ('dupond', 26691, 'commercial', 27047, '04/04/1990', 25000, 2500, 20)
+    ('martin', 16712, 'directeur', 257187, '1990-05-23', 40000, 4000, 30),
+    ('dupont', 17574, 'administratif', 16712, '1995-05-03', 9000, 500, 30),
+    ('lambert', 25012, 'administratif', 27047, '1991-04-14', 12000, 150, 20),
+    ('dupond', 26691, 'commissionercial', 27047, '1990-04-04', 25000, 2500, 20)
     ;
 ```
 
+### Clé étrangère
+```sql
+CREATE TABLE IF NOT EXISTS Adresses (
+    adresse_id INTEGER PRIMARY KEY, -- Clé primaire propre à cette table
+    employe_id INTEGER, -- 1) On crée d'abord de la colonne
+    adresse TEXT,
+    code_postal INTEGER,
+    ville TEXT,
+    FOREIGN KEY (employe_id) REFERENCES Employes(id) -- 2) On indique que la colonne est une clé étrangère
+);
+```
 
-## Requête `SELECT`
-L'ordre SQL `SELECT` est composé de 6 clauses, dont 4 sont optionnelles. 
+## Requête `SELECT` 
 
 | Clause | Rôle et description |
 | :--- | :--- |
 | **SELECT** | Spécification des colonnes du résultat. Le mot clé **AS** offre la possibilité de nommer le résultat. |
+| **SELECT \*** | Toutes les colonnes sont sélectionnées. |
 | **FROM** | Spécification des tables sur lesquelles porte l'ordre. |
+| **ORDER BY** | **ASC** ou **DESC** |
 | **WHERE** | Filtre portant sur les données (conditions à remplir pour que les lignes soient présentes dans le résultat). |
 | **GROUP BY** | Définition d'un groupe (sous-ensemble). |
 | **HAVING** | Filtre portant sur les résultats (conditions de regroupement des lignes). |
 | **ORDER BY** | Tri des données du résultat. |
+| | |
+| **= != < > <= >=** | |
+| **BETWEEN** | |
+| **AND OR** | `WHERE salaire BETWEEN 9000 AND 15000` |
+| **IS (NOT) NULL** | |
 
 
 ```sql
 SELECT nom, salaire, commission
-FROM employes
-WHERE comm < salaire
+FROM Employes
+ORDER BY nom_client ASC
+WHERE commission < salaire
 
 WHERE salaire BETWEEN 9000 AND 15000
 
 WHERE n_dept = 30 AND salaire > 25000
 
 WHERE commission IS NULL
+WhERE adresse IS NOT NULL
+
+WHERE nom LIKE 'M%'
+WHERE nom LIKE 'M*' -- Access
+WHERE nom LIKE '[A-D]*' -- Access uniquement
 ;
 ```
 
-## Fonctions d'agrégation
+## Fonctions d'agrégation + regroupement
 Ces fonctions s'utilisent pour effectuer des calculs sur un ensemble de données regroupées :
 
 * **`SUM(nom_attribut)`** : calcule la **somme** des valeurs des attributs.
@@ -65,6 +89,9 @@ Ces fonctions s'utilisent pour effectuer des calculs sur un ensemble de données
 * **`COUNT(nom_attribut)`** : compte le **nombre d'occurrences** de l'attribut.
 * **`AVG(nom_attribut)`** : calcule la **moyenne** des valeurs des attributs.
 
+- `GROUP BY` : définition d'un groupe (sous-ensemble)
+- `HAVING` : filtre portant sur les résultats (regroupement des lignes)
+- `ORDER BY` : tri des données du résultat; ex : `ORDER BY nom`
 ```sql
 SELECT nom_gestionnaire, AVG(solde) AS solde_moyen
 FROM comptes
@@ -82,15 +109,16 @@ Les opérateurs permettent de comparer une valeur à un ensemble de valeurs ou d
 * **Opérateurs arithmétiques** : `+`, `-`, `*`, `/`.
 
 ```sql
-SELECT nom, salaire, commission
-FROM employes
-WHERE function IN ('commercial', 'directeur')
+SELECT nom, salaire, commissionission
+FROM Employes
+WHERE fonction IN ('commissionercial', 'directeur')
+WHERE adresse IS NOT NULL
 ;
 ```
 
 ## Jointures
 
-Les jointures permettent d'interroger simultanément plusieurs tables liées entre elles par des attributs communs (généralement une clé primaire et une clé étrangère).
+Les jointures permettent d'interroger simultanément plusieurs tables liées entre elles par des attributs commissionuns (généralement une clé primaire et une clé étrangère).
 
 ### Syntaxe explicite (`INNER JOIN`)
 - `INNER JOIN` : assembler deux tables
@@ -124,4 +152,4 @@ INNER JOIN Comptes ON Titulaires.numero_compte = Comptes.numero_compte
 INNER JOIN Clients ON Titulaires.nom_client = Clients.nom_client;
 ```
 
-**Note :** Si un attribut porte le même nom dans plusieurs des tables interrogées (comme `nom_client` ou `numero_compte`), il faut obligatoirement préciser de quelle table il provient en le préfixant (`Table.attribut`, par exemple `Titulaires.nom_client`), tant dans le `SELECT` que dans le `ON` ou `WHERE`, afin d'éviter toute ambiguïté.
+**Note :** Si un attribut porte le même nom dans plusieurs des tables interrogées (commissione `nom_client` ou `numero_compte`), il faut obligatoirement préciser de quelle table il provient en le préfixant (`Table.attribut`, par exemple `Titulaires.nom_client`), tant dans le `SELECT` que dans le `ON` ou `WHERE`, afin d'éviter toute ambiguïté.
