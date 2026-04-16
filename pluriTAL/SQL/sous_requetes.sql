@@ -91,7 +91,6 @@ FROM Comptes
 WHERE Comptes.solde < (SELECT MIN(solde) FROM Comptes WHERE Comptes.nom_gestionnaire = 'Caron')
 ;
 
-
 -- Q4 : Quels sont les clients qui n'ont pas de compte ? (les clients dans la table « clients » peuvent ne pas figurer dans la table « titulaires »)
 SELECT Clients.nom_client
 FROM Clients

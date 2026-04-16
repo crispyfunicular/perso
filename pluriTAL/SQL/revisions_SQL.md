@@ -6,7 +6,10 @@ Ce document synthétise les commissionandes et concepts SQL abordés dans le cou
 
 * `CREATE TABLE` : Permet de créer la structure d'une table.
 * **Types de données** : `INT` pour les entiers, `VARCHAR()` pour les chaînes de caractères variables, `CHAR()`.
-* **Contraintes** : `PRIMARY KEY` pour la clé primaire, `AUTO INCREMENT` pour l'incrémentation automatique.
+* **Contraintes** :
+  - `PRIMARY KEY` pour la clé primaire
+  - `AUTO INCREMENT` pour l'incrémentation automatique
+  - `FOREIGN KEY`
 
 ```sql
 CREATE TABLE IF NOT EXISTS Employes (
@@ -90,7 +93,7 @@ Ces fonctions s'utilisent pour effectuer des calculs sur un ensemble de données
 * **`AVG(nom_attribut)`** : calcule la **moyenne** des valeurs des attributs.
 
 - `GROUP BY` : définition d'un groupe (sous-ensemble)
-- `HAVING` : filtre portant sur les résultats (regroupement des lignes)
+- `HAVING` : filtre portant sur les résultats (regroupement des lignes) -> applique des conditions sur les résultats agrégés
 - `ORDER BY` : tri des données du résultat; ex : `ORDER BY nom`
 ```sql
 SELECT nom_gestionnaire, AVG(solde) AS solde_moyen
@@ -152,4 +155,67 @@ INNER JOIN Comptes ON Titulaires.numero_compte = Comptes.numero_compte
 INNER JOIN Clients ON Titulaires.nom_client = Clients.nom_client;
 ```
 
-**Note :** Si un attribut porte le même nom dans plusieurs des tables interrogées (commissione `nom_client` ou `numero_compte`), il faut obligatoirement préciser de quelle table il provient en le préfixant (`Table.attribut`, par exemple `Titulaires.nom_client`), tant dans le `SELECT` que dans le `ON` ou `WHERE`, afin d'éviter toute ambiguïté.
+**Note :** Si un attribut porte le même nom dans plusieurs des tables interrogées, il faut obligatoirement préciser de quelle table il provient en le préfixant (`Titulaires.numero_compte`et `Comptes.numero_compte`), tant dans le `SELECT` que dans le `ON` ou `WHERE`, afin d'éviter toute ambiguïté.
+
+### LEFT / RIGHT JOIN
+
+- `LEFT JOIN` ou `LEFT OUTER JOIN` : retourne toutes les lignes de la table de gauche et les lignes correspondantes de la table de droite. Si aucune correspondance n’est trouvée, les colonnes de la table de droite prennent la valeur `NULL`.
+- `RIGHT JOIN` ou `RIGHT OUTER JOIN` : retourne toutes les lignes de la table de droite et les lignes correspondantes de la table de gauche. Si aucune correspondance n’est trouvée, les colonnes de la table de gauche prennent la valeur `NULL`.
+
+```sql
+SELECT *
+FROM table1 LEFT OUTER JOIN table2
+ON table1.id = table2.fk_id;
+```
+
+
+## Sous-requêtes
+
+Requêtes placées à l'intérieur d'une autre requête. --> calculer des valeurs ou filtrer des données à partir d'un jeu de résultats intermédiaire.
+
+* Dans une clause `SELECT`, `FROM`, `WHERE` ou `HAVING`.
+* Elle est souvent encadrée par des parenthèses et retourne un résultat unique, une liste de valeurs ou un ensemble de lignes.
+* Une sous-requête est corrélée si elle dépend d'une valeur de la requête principale pour s'exécuter.
+
+### Mots-clés
+--> indiquent que la condition du `WHERE` s'appuie sur le résultat d'une autre requête
+* `IN` : "dans", "parmi"
+* `NOT IN` : "qui ne sont pas dans"
+* `EXCEPT` : "sauf", "à l'exception de"
+* `ANY` : "au moins un"
+* `SOME` : "certains
+* `ALL` : "tous" / "chaque" -> condition vérifiée par rapport à l'intégralité d'un autre ensemble de données
+* `EXISTS` : "existe" -> cherche la correspondance dans une autre table sans ramener la donnée
+
+```sql
+--  Q1 : Quels sont les numéros de compte dont le solde est plus grand que la moyenne des soldes ?
+SELECT Comptes.numero_compte
+FROM Comptes
+WHERE Comptes.solde > (SELECT AVG(solde) FROM Comptes)
+;
+
+-- Q2 : Quels sont les numéros de compte qui ont un solde inférieur à au moins un des soldes des comptes dont le gestionnaire est « Caron » ?
+SELECT Comptes.numero_compte
+FROM Comptes
+WHERE Comptes.solde < (SELECT MAX(solde) FROM Comptes WHERE Comptes.nom_gestionnaire = 'Caron')
+;
+
+-- Q3 : Quels sont les numéros de compte qui ont un solde inférieur à tous les soldes des comptes dont le gestionnaire est « Caron » ?
+SELECT Comptes.numero_compte
+FROM Comptes
+WHERE Comptes.solde < (SELECT MIN(solde) FROM Comptes WHERE Comptes.nom_gestionnaire = 'Caron')
+;
+
+-- Q4 : Quels sont les clients qui n'ont pas de compte ? (les clients dans la table « clients » peuvent ne pas figurer dans la table « titulaires »)
+SELECT Clients.nom_client
+FROM Clients
+WHERE nom_client NOT IN (SELECT nom_client FROM Titulaires)
+;
+```
+
+* Utiliser `IN`, `EXISTS`, `ANY`, `ALL` avec des sous-requêtes pour des conditions complexes.
+* Préférer les jointures quand la même logique peut être exprimée plus efficacement.
+
+
+## TODO
+`UNION` : combine les résultats de deux requêtes et supprime les lignes identiques présentes dans les deux ensembles
