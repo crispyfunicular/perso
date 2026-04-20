@@ -13,7 +13,7 @@ Ce document synthétise les commissionandes et concepts SQL abordés dans le cou
 
 ```sql
 CREATE TABLE IF NOT EXISTS Employes (
-    id INTEGER NOT NULL PRIMARY KEY, -- Auto-incrémentation
+    id INTEGER NOT NULL PRIMARY KEY AUTO_INCREMENT,
     nom TEXT,
     num INTEGER,
     fonction TEXT,
@@ -186,6 +186,7 @@ Requêtes placées à l'intérieur d'une autre requête. --> calculer des valeur
 * `SOME` : "certains
 * `ALL` : "tous" / "chaque" -> condition vérifiée par rapport à l'intégralité d'un autre ensemble de données
 * `EXISTS` : "existe" -> cherche la correspondance dans une autre table sans ramener la donnée
+* `GROUP BY` : "par", "pour chaque" ou  information descriptive (nom, titre, ID) + fonction d'agrégation (`SUM`, `COUNT`, `AVG`, `MAX`, `MIN`)
 
 ```sql
 --  Q1 : Quels sont les numéros de compte dont le solde est plus grand que la moyenne des soldes ?
