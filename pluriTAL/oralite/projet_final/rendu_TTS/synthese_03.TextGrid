@@ -1,0 +1,132 @@
+File type = "ooTextFile"
+Object class = "TextGrid"
+
+xmin = 0 
+xmax = 2.505 
+tiers? <exists> 
+size = 2 
+item []: 
+    item [1]:
+        class = "IntervalTier" 
+        name = "words" 
+        xmin = 0 
+        xmax = 2.505 
+        intervals: size = 1 
+        intervals [1]:
+            xmin = 0.0 
+            xmax = 2.505 
+            text = "Je ne peux atteindre les bocaux de confiture." 
+    item [2]:
+        class = "IntervalTier" 
+        name = "phones" 
+        xmin = 0 
+        xmax = 2.505 
+        intervals: size = 27 
+        intervals [1]:
+            xmin = 0.0 
+            xmax = 0.09277777777777778 
+            text = "ʒ" 
+        intervals [2]:
+            xmin = 0.09277777777777778 
+            xmax = 0.18555555555555556 
+            text = "ə" 
+        intervals [3]:
+            xmin = 0.18555555555555556 
+            xmax = 0.2783333333333333 
+            text = "n" 
+        intervals [4]:
+            xmin = 0.2783333333333333 
+            xmax = 0.3711111111111111 
+            text = "ə" 
+        intervals [5]:
+            xmin = 0.3711111111111111 
+            xmax = 0.4638888888888889 
+            text = "p" 
+        intervals [6]:
+            xmin = 0.4638888888888889 
+            xmax = 0.5566666666666666 
+            text = "ø" 
+        intervals [7]:
+            xmin = 0.5566666666666666 
+            xmax = 0.6494444444444445 
+            text = "a" 
+        intervals [8]:
+            xmin = 0.6494444444444445 
+            xmax = 0.7422222222222222 
+            text = "t" 
+        intervals [9]:
+            xmin = 0.7422222222222222 
+            xmax = 0.835 
+            text = "ɛ̃" 
+        intervals [10]:
+            xmin = 0.835 
+            xmax = 0.9277777777777778 
+            text = "d" 
+        intervals [11]:
+            xmin = 0.9277777777777778 
+            xmax = 1.0205555555555557 
+            text = "ʁ" 
+        intervals [12]:
+            xmin = 1.0205555555555557 
+            xmax = 1.1133333333333333 
+            text = "ə" 
+        intervals [13]:
+            xmin = 1.1133333333333333 
+            xmax = 1.2061111111111111 
+            text = "l" 
+        intervals [14]:
+            xmin = 1.2061111111111111 
+            xmax = 1.298888888888889 
+            text = "e" 
+        intervals [15]:
+            xmin = 1.298888888888889 
+            xmax = 1.3916666666666666 
+            text = "b" 
+        intervals [16]:
+            xmin = 1.3916666666666666 
+            xmax = 1.4844444444444445 
+            text = "ɔ" 
+        intervals [17]:
+            xmin = 1.4844444444444445 
+            xmax = 1.5772222222222223 
+            text = "k" 
+        intervals [18]:
+            xmin = 1.5772222222222223 
+            xmax = 1.67 
+            text = "o" 
+        intervals [19]:
+            xmin = 1.67 
+            xmax = 1.7627777777777778 
+            text = "d" 
+        intervals [20]:
+            xmin = 1.7627777777777778 
+            xmax = 1.8555555555555556 
+            text = "ə" 
+        intervals [21]:
+            xmin = 1.8555555555555556 
+            xmax = 1.9483333333333333 
+            text = "k" 
+        intervals [22]:
+            xmin = 1.9483333333333333 
+            xmax = 2.0411111111111113 
+            text = "ɔ̃" 
+        intervals [23]:
+            xmin = 2.0411111111111113 
+            xmax = 2.133888888888889 
+            text = "f" 
+        intervals [24]:
+            xmin = 2.133888888888889 
+            xmax = 2.2266666666666666 
+            text = "i" 
+        intervals [25]:
+            xmin = 2.2266666666666666 
+            xmax = 2.3194444444444446 
+            text = "t" 
+        intervals [26]:
+            xmin = 2.3194444444444446 
+            xmax = 2.4122222222222223 
+            text = "y" 
+        intervals [27]:
+            xmin = 2.4122222222222223 
+            xmax = 2.505 
+            text = "ʁ" 
