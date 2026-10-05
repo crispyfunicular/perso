@@ -1,0 +1,4 @@
+venv/
+reseaux-neurones/tp3/imdb_smol/
+*.tar.gz
+*.zip
