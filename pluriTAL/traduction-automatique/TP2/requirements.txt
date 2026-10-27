@@ -1,0 +1,26 @@
+# Dépendances du TP2 (traduction automatique : IBM Model 1, alignement, évaluation)
+# Installation : pip install -r requirements.txt
+
+# --- Outils de base ---
+numpy==1.26.4          # calcul numérique
+ipykernel              # pour lancer les notebooks Jupyter
+setuptools<81          # version imposée dans le notebook (compatibilité COMET)
+
+# --- Évaluation de la traduction ---
+sacrebleu==2.6.0       # scores BLEU et chrF
+unbabel-comet==2.2.7   # métrique neuronale COMET
+nltk==3.10.3           # tokenisation et outils de TAL
+
+# --- Données et modèles ---
+datasets==5.0.1        # chargement de corpus Hugging Face
+pyarrow==21.0.0        # version imposée dans le notebook (compatibilité datasets)
+transformers==4.57.6   # modèles pré-entraînés (pipeline, tokenizers)
+torch==2.14.1          # moteur de calcul pour les modèles neuronaux
+sentence-transformers==5.7.0  # plongements de phrases (la 6.x impose transformers 5, incompatible avec COMET)
+
+# --- Segmentation et alignement ---
+wtpsplit==2.2.2        # découpage en phrases (SaT)
+#bertalign             # alignement de phrases (désactivé : exige Python >= 3.12, le venv est en 3.11)
+simalign==0.4          # alignement de mots avec des plongements
+eflomal==2.0.0         # alignement de mots statistique
+python-bidi==0.6.11    # affichage correct du yiddish (écriture de droite à gauche)

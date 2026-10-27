@@ -1,0 +1,18 @@
+# Environnement virtuel Python (6 Go ; se recrée avec : pip install -r requirements.txt)
+venv/
+
+# Fichiers temporaires de Python
+__pycache__/
+*.pyc
+
+# Sauvegardes automatiques de Jupyter
+.ipynb_checkpoints/
+
+# Journaux créés par PyTorch Lightning (COMET)
+lightning_logs/
+
+# Réglages personnels de Claude Code
+.claude/settings.local.json
+
+# Fichiers système
+.DS_Store

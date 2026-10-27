@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(./venv/bin/python -I /tmp/claude-1000/-home-cam-git-pluriTAL-traduction-automatique-TP2/13ac13a8-ec63-48b7-a663-132e777a41c6/scratchpad/mesurer_n_iter.py TP2_IBM_Model1_canal_bruite_evaluation.ipynb /home/cam/git/pluriTAL/traduction-automatique/TP2)",
+      "Bash(python3 -I /tmp/claude-1000/-home-cam-git-pluriTAL-traduction-automatique-TP2/13ac13a8-ec63-48b7-a663-132e777a41c6/scratchpad/ajouter_copies_n_iter.py TP2_IBM_Model1_canal_bruite_evaluation.ipynb /tmp/claude-1000/-home-cam-git-pluriTAL-traduction-automatique-TP2/13ac13a8-ec63-48b7-a663-132e777a41c6/scratchpad/TP2_avant_copies_n_iter.ipynb)",
+      "Bash(python3 -I -c ' *)",
+      "Bash(python3 -I /tmp/claude-1000/-home-cam-git-pluriTAL-traduction-automatique-TP2/13ac13a8-ec63-48b7-a663-132e777a41c6/scratchpad/remplir_question5.py TP2_IBM_Model1_canal_bruite_evaluation.ipynb /tmp/claude-1000/-home-cam-git-pluriTAL-traduction-automatique-TP2/13ac13a8-ec63-48b7-a663-132e777a41c6/scratchpad/TP2_avant_question5.ipynb)"
+    ]
+  }
+}
