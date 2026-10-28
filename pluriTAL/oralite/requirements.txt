@@ -1,0 +1,5 @@
+pip install praat-parselmouth
+pip install matplotlib
+pip install numpy
+pip install Ipython
+pip install praat-textgrids
