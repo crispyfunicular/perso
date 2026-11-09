@@ -56,9 +56,8 @@ L’analyse ci-dessous est faite d’après 1) le code, 2) les traductions de r�
 - HYP : « six “ voraces pupilles mansarde ” … . »
 - REF : « Sept colombes nimbées de rayons m’ont ramené à la maison. »
 
-**Hypothèses** :
-- Trois mots n’apparaissent jamais dans les 430 phrases d’entraînement : <span dir="rtl">שטראַליקע</span> (« rayonnantes » selon le juge), <span dir="rtl">געבראַכט</span> (« apporté ») et <span dir="rtl">אַהיים</span> (« à la maison »). Puisque le modèle n’a appris aucune traduction pour eux, leur probabilité vaut 0 pour tous les mots français. Comme tous les candidats sont à égalité, le décodeur retient les derniers mots de son vocabulaire dans l’ordre des caractères, qui sont des signes de ponctuation (« … », « ” », « “ »). Ces trois mots porteurs de sens sont donc rendus par « “ », « ” » et « … ».
-- Sur les 30 phrases de test, 85 des 506 mots source (17 %) n’apparaissent jamais à l’entraînement, et 66 (13 %) y apparaissent une ou deux fois.
+**Hypothèse** : Trois mots n’apparaissent jamais dans les 430 phrases d’entraînement : <span dir="rtl">שטראַליקע</span> (« rayonnantes » selon le juge), <span dir="rtl">געבראַכט</span> (« apporté ») et <span dir="rtl">אַהיים</span> (« à la maison »). Puisque le modèle n’a appris aucune traduction pour eux, leur probabilité vaut 0 pour tous les mots français. Comme tous les candidats sont à égalité, le décodeur retient les derniers mots de son vocabulaire dans l’ordre des caractères, qui sont des signes de ponctuation (« … », « ” », « “ »). Ces trois mots porteurs de sens sont donc rendus par « “ », « ” » et « … ».
+**Remarque** : Sur les 30 phrases de test, 85 des 506 mots source (17 %) n’apparaissent jamais à l’entraînement, et 66 (13 %) y apparaissent une ou deux fois.
 
 **b) Un mot source ne correspond pas toujours à un seul mot cible (fertilité)**
 
@@ -68,7 +67,7 @@ L’analyse ci-dessous est faite d’après 1) le code, 2) les traductions de r�
 
 Selon le juge, les mots <span dir="rtl">טוט אַ זעץ</span> forment une locution (littéralement « fait un coup ») que la référence rend par le seul verbe « cogne ». La sortie « reste un coup » traduit manifestement chaque mot séparément et ne la reconstitue pas.  
 
-**Hypothèse** : IBM Model 1 associe chaque mot source à un seul mot cible : il ne peut ni regrouper plusieurs mots source, ni en omettre, ni ajouter un mot sans équivalent dans la source.
+**Hypothèse** : IBM Model 1 ne modélise pas la fertilité, c’est-à-dire le nombre de mots source qu’un mot cible peut produire. De plus, le décodeur associe chaque mot source à un seul mot cible (exactement un mot français par mot yiddish) et ne peut donc pas rendre une locution de trois mots par un seul verbe.
 
 **c) Ordre des mots**
 
@@ -78,7 +77,7 @@ Selon le juge, les mots <span dir="rtl">טוט אַ זעץ</span> forment une lo
 
 La sortie suit l’ordre des mots yiddish : « tête », « années » et « épaules » sont produits pour <span dir="rtl">קאָפּ</span>, <span dir="rtl">יאָרן</span> et <span dir="rtl">אַקסלען</span>, dans cet ordre, alors que la référence place « épaules » avant « années ».
 
-**Hypothèse** : IBM Model 1 semble ne pas tenir compte de la position des mots et d’accorder la même probabilité à tous les alignements sont équiprobables, tandis que le décodeur conserve l’ordre de la source.
+**Hypothèse** : IBM Model 1 ne tient pas compte de la position des mots et accorde la même probabilité à tous les alignements, tandis que le décodeur conserve l’ordre de la source et produit les mots français dans l’ordre des mots yiddish.
 
 ### Question 3 : Utilité du lexique bilingue
 
