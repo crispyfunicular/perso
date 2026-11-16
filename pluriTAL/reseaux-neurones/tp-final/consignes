@@ -1,0 +1,16 @@
+TP 20ng
+À faire : un notebook qui récupère les données, entraîne un (ou plusieurs) modèle et l'évalue.
+
+Vous serez évalué⋅es sur les performances du modèle, le temps d'exécution du notebook, la qualité du code et la qualité de vos explications.
+Le notebook doit s'exécuter sur une machine standard, avec Python 3.13, 3.14 ou 3.15 et sans configuration non-documentéee.
+Si vous utilisez des packages autres que ceux utilisés dans le cours documentez-les au début du notebook.
+Si votre notebook ne fonctionne pas sans que j'ai à le modifier, ce sera pénalisé.
+Les résultats doivent être clairement affichés à la fin. Cet affichage doit être généré (pas écrit à la main).
+Les résultats doivent être exactement les mêmes à chaque exécution du notebook (après un redémarrage du kernel). Pensez aux random seed.
+Si vous mettez du texte explicatif, des titres, etc., c'est mieux. A minima le notebook doit contenir vos noms, prénoms et établissement principal.
+Les données doivent être celles venant de scikit-learn.
+Vous devez utiliser le split train/test standard.
+Vous pouvez utiliser une vectorisation et des prétraitements différents de ceux par défaut.
+Les données doivent être chargées avec remove=("headers", "footers", "quotes").
+Tous les coups sont permis : vous avez droit à tout sauf aux réseaux de neurones (à part éventuellement un perceptron).
+Les choix d'hyperparamètres différents de ceux par défauts doivent être justifiés (dans des cellules de textes) de façon aussi convaincante que possible). Si vous utilisez des algorithmes de recherches (type grid search), ils doivent faire partie du notebook (et donc compter dans le temps d'exécution).
