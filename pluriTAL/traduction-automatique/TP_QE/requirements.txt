@@ -1,0 +1,15 @@
+# Dépendances du TP QE (estimation de la qualité de traduction avec un MLP)
+# Installation : pip install -r requirements.txt
+
+# --- Outils de base ---
+numpy==2.4.6           # calcul numérique
+pandas==3.1.1          # tableaux de données
+scipy==1.17.1          # corrélations de Pearson et de Spearman
+matplotlib==3.11.2     # graphiques
+ipykernel==7.4.0       # pour lancer les notebooks Jupyter
+
+# --- Données et modèles ---
+datasets==5.2.0        # chargement de corpus Hugging Face
+torch==2.15.0          # moteur de calcul (MLP)
+transformers==5.22.2   # dépendance de sentence-transformers
+sentence-transformers==6.2.0  # plongements de phrases
